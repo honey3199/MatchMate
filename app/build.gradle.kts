@@ -71,4 +71,8 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     kapt(libs.androidx.room.compiler)
 
+    //Retrofit
+    implementation(libs.retrofit)
+    implementation(libs.gson.converter)
+    implementation(libs.com.gson)
 }

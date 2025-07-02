@@ -14,6 +14,7 @@ activity = "1.10.1"
 constraintlayout = "2.1.4"
 daggerHilt = "2.52"
 room= "2.7.1"
+retrofit = "2.9.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -39,6 +40,9 @@ dagger-hilt-android = { group = "com.google.dagger", name="hilt-android", versio
 dagger-hilt-compiler = { group = "com.google.dagger", name="hilt-compiler", version.ref = "daggerHilt" }
 androidx-room-runtime = { group = "androidx.room", name="room-runtime", version.ref = "room" }
 androidx-room-compiler = { group = "androidx.room", name="room-compiler", version.ref = "room" }
+retrofit = { group = "com.squareup.retrofit2", name="retrofit", version.ref = "retrofit" }
+gson-converter = { group = "com.squareup.retrofit2", name="converter-gson", version.ref = "retrofit" }
+com-gson = { group = "com.google.code.gson", name="gson", version.ref = "retrofit" }
 
 
 [plugins]
