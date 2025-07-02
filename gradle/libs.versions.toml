@@ -13,6 +13,7 @@ material = "1.10.0"
 activity = "1.10.1"
 constraintlayout = "2.1.4"
 daggerHilt = "2.52"
+room= "2.7.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -36,6 +37,10 @@ androidx-constraintlayout = { group = "androidx.constraintlayout", name = "const
 
 dagger-hilt-android = { group = "com.google.dagger", name="hilt-android", version.ref = "daggerHilt" }
 dagger-hilt-compiler = { group = "com.google.dagger", name="hilt-compiler", version.ref = "daggerHilt" }
+androidx-room-runtime = { group = "androidx.room", name="room-runtime", version.ref = "room" }
+androidx-room-compiler = { group = "androidx.room", name="room-compiler", version.ref = "room" }
+
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
