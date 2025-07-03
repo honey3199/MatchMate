@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.matchmate.data.local.LocalRepository
 import com.example.matchmate.data.local.User
+import com.example.matchmate.data.models.Results
 import com.example.matchmate.data.remote.RemoteRepository
 import com.example.matchmate.data.remote.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,20 +19,25 @@ class HomeViewModel @Inject constructor(
     private val localRepository: LocalRepository,
     private val remoteRepository: RemoteRepository
 ) : ViewModel() {
-
     private val TAG = "HomeViewModel"
-
-    private val users = mutableListOf<User>()
 
     private val _userData = MutableLiveData<RemoteResponse>()
     val userData: LiveData<RemoteResponse> = _userData
+    val cachedUserData: LiveData<List<User>> = localRepository.getUsersLive()
 
-//    val cachedUserData: LiveData<RemoteResponse> = localRepository.getUsersLive()
+    var currentUserAge: Int? = null
+    var currentUserCity: String? = null
 
-    var count = 30
+    var count = 50
 
     fun updateSelected(user: User) = viewModelScope.launch {
         localRepository.updateUser(user)
+    }
+
+    init {
+        if (cachedUserData.value == null || cachedUserData.value!!.isEmpty()) {
+            fetchUsersFromRemote()
+        }
     }
 
     fun fetchUsersFromRemote() = viewModelScope.launch {
@@ -52,7 +58,8 @@ class HomeViewModel @Inject constructor(
                         location = user.location,
                         name = "${user.name.first} ${user.name.last}",
                         phone = user.phone,
-                        picture = user.picture
+                        picture = user.picture,
+                        matchScore = computeMatchScore(user)
                     )
 //                    }
                 }
@@ -71,8 +78,22 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun userMatchScore() {
+    fun computeMatchScore(userA: Results): Int {
+        var score = 0
 
+        val ageDifference = kotlin.math.abs(userA.dob.age - (currentUserAge ?: 0))
+        val ageScore = when {
+            ageDifference <= 2 -> 70
+            ageDifference <= 5 -> 50
+            ageDifference <= 8 -> 30
+            else -> 10
+        }
+        score += ageScore
+
+        val cityScore = if (userA.location.city.equals(currentUserCity, ignoreCase = true)) 30 else 0
+        score += cityScore
+
+        return score.coerceIn(0, 100)
     }
 }
 

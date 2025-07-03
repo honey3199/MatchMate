@@ -19,18 +19,17 @@ data class User(
     @ColumnInfo @SerialName("picture") val picture: Picture,
     @ColumnInfo @SerialName("profession") var profession: String = "Job",
     @ColumnInfo @SerialName("education") val education: String = "Graduate",
-    @ColumnInfo(name = "status") var status: Status = Status.NOT_VIEWED
+    @ColumnInfo(name = "status") var status: Status = Status.NOT_VIEWED,
+    @ColumnInfo(name = "match_score") var matchScore: Int
 )
 
 fun User.getDetails(): String {
     return """
         Name       : $name
         Age        : $age
-        Gender     : ${gender.capitalize()}
         Profession : $profession
         Education  : $education
         Location   : ${location.city}, ${location.state}, ${location.country}
-        Phone      : $phone
     """.trimIndent()
 }
 

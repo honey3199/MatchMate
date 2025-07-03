@@ -12,4 +12,6 @@
     <dimen name="size_22sp">22sp</dimen>
     <dimen name="size_16sp">16sp</dimen>
     <dimen name="margin_60dp">60dp</dimen>
+    <dimen name="size_14sp">14sp</dimen>
+    <dimen name="margin_12dp">12dp</dimen>
 </resources>

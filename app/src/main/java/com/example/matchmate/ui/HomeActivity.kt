@@ -28,20 +28,24 @@ class HomeActivity : AppCompatActivity() {
                 LinearLayoutManager(this@HomeActivity, LinearLayoutManager.VERTICAL, false)
         }
 
-        viewModel.fetchUsersFromRemote()
 
-        viewModel.userData.observe(this) {
-            when (it) {
-                is RemoteResponse.Error -> {
-                    Toast.makeText(this@HomeActivity, it.errorMessage, LENGTH_LONG).show()
-                }
+        with(viewModel) {
+            cachedUserData.observe(this@HomeActivity) {
+                userAdapter.setUserData(users = it)
+            }
+            userData.observe(this@HomeActivity) {
+                when (it) {
+                    is RemoteResponse.Error -> {
+                        Toast.makeText(this@HomeActivity, it.errorMessage, LENGTH_LONG).show()
+                    }
 
-                RemoteResponse.Loading -> {
-                    // Show Loader
-                }
+                    RemoteResponse.Loading -> {
+                        // Show Loader
+                    }
 
-                is RemoteResponse.Success -> {
-                    userAdapter.setUserData(users = it.users)
+                    is RemoteResponse.Success -> {
+                        userAdapter.setUserData(users = it.users)
+                    }
                 }
             }
         }

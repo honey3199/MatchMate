@@ -48,7 +48,7 @@ class UserDataAdapter(private val onStatusChanged: (user: User) -> Unit) :
             binding.apply {
                 userName.text = user.name
                 userDetails.text = user.getDetails()
-
+                tvMatchScore.text = itemView.context.getString(R.string.match_score, user.matchScore)
                 with(user.status) {
                     when (this) {
                         Status.SELECTED -> {
@@ -64,8 +64,6 @@ class UserDataAdapter(private val onStatusChanged: (user: User) -> Unit) :
                                     itemView.context, android.R.color.holo_green_dark
                                 )
                             )
-                            // set background to "@drawable/bg_selected"
-                            // set text color to holo_green_dark
                         }
 
                         Status.REJECTED -> {
@@ -81,8 +79,6 @@ class UserDataAdapter(private val onStatusChanged: (user: User) -> Unit) :
                                     itemView.context, android.R.color.holo_red_dark
                                 )
                             )
-                            // set background to "@drawable/bg_rejected"
-                            // set text color to holo_red_dark
                         }
 
                         Status.NOT_VIEWED -> {
