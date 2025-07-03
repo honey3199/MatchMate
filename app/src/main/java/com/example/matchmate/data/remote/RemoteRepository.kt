@@ -1,8 +1,7 @@
 package com.example.matchmate.data.remote
 
-import com.google.gson.JsonObject
-import retrofit2.Response
+import com.example.matchmate.data.models.UserResponse
 
 interface RemoteRepository {
-    suspend fun getUsers(): Response<JsonObject>
+    suspend fun getUsers(count: Int): Resource<UserResponse>
 }
