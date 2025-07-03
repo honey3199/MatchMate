@@ -15,7 +15,7 @@ constraintlayout = "2.1.4"
 daggerHilt = "2.52"
 room= "2.7.1"
 retrofit = "2.9.0"
-uiGraphicsAndroid = "1.8.3"
+glide = "4.16.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -44,8 +44,8 @@ androidx-room-compiler = { group = "androidx.room", name="room-compiler", versio
 retrofit = { group = "com.squareup.retrofit2", name="retrofit", version.ref = "retrofit" }
 gson-converter = { group = "com.squareup.retrofit2", name="converter-gson", version.ref = "retrofit" }
 com-gson = { group = "com.google.code.gson", name="gson", version.ref = "retrofit" }
-androidx-ui-graphics-android = { group = "androidx.compose.ui", name = "ui-graphics-android", version.ref = "uiGraphicsAndroid" }
-
+com-github-glide = { group = "com.github.bumptech.glide", name="glide", version.ref = "glide" }
+com-github-glide-compiler = { group = "com.github.bumptech.glide", name="compiler", version.ref = "glide" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

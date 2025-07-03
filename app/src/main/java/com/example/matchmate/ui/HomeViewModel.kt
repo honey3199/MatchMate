@@ -34,12 +34,6 @@ class HomeViewModel @Inject constructor(
         localRepository.updateUser(user)
     }
 
-    init {
-        if (cachedUserData.value == null || cachedUserData.value!!.isEmpty()) {
-            fetchUsersFromRemote()
-        }
-    }
-
     fun fetchUsersFromRemote() = viewModelScope.launch {
         _userData.value = RemoteResponse.Loading
         val result = remoteRepository.getUsers(count)

@@ -1,6 +1,7 @@
 package com.example.matchmate.ui
 
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import android.widget.Toast.LENGTH_LONG
 import androidx.activity.viewModels
@@ -22,16 +23,47 @@ class HomeActivity : AppCompatActivity() {
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.recyclerView.apply {
-            adapter = userAdapter
-            layoutManager =
-                LinearLayoutManager(this@HomeActivity, LinearLayoutManager.VERTICAL, false)
+        binding.apply {
+            recyclerView.apply {
+                adapter = userAdapter
+                layoutManager =
+                    LinearLayoutManager(this@HomeActivity, LinearLayoutManager.VERTICAL, false)
+            }
+
+            btnSubmit.setOnClickListener {
+                if (!etAge.text.isEmpty() && !etCity.text.isEmpty()) {
+                    etCity.visibility = View.GONE
+                    etAge.visibility = View.GONE
+                    btnSubmit.visibility = View.GONE
+
+                    viewModel.currentUserAge = etAge.text.toString().toInt()
+                    viewModel.currentUserCity = etCity.text.toString()
+
+                    viewModel.fetchUsersFromRemote()
+                    recyclerView.visibility = View.VISIBLE
+                } else {
+                    Toast.makeText(this@HomeActivity, "Add input to proceed..!!", LENGTH_LONG).show()
+                }
+            }
         }
 
 
         with(viewModel) {
             cachedUserData.observe(this@HomeActivity) {
-                userAdapter.setUserData(users = it)
+                binding.apply {
+                    if (it.isEmpty()) {
+                        etCity.visibility = View.VISIBLE
+                        etAge.visibility = View.VISIBLE
+                        btnSubmit.visibility = View.VISIBLE
+                        recyclerView.visibility = View.GONE
+                    } else {
+                        etCity.visibility = View.GONE
+                        etAge.visibility = View.GONE
+                        btnSubmit.visibility = View.GONE
+                        recyclerView.visibility = View.VISIBLE
+                        userAdapter.setUserData(it)
+                    }
+                }
             }
             userData.observe(this@HomeActivity) {
                 when (it) {

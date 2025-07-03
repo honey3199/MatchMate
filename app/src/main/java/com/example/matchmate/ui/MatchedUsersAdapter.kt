@@ -6,6 +6,7 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.matchmate.R
 import com.example.matchmate.data.local.Status
 import com.example.matchmate.data.local.User
@@ -49,6 +50,8 @@ class UserDataAdapter(private val onStatusChanged: (user: User) -> Unit) :
                 userName.text = user.name
                 userDetails.text = user.getDetails()
                 tvMatchScore.text = itemView.context.getString(R.string.match_score, user.matchScore)
+                Glide.with(itemView.context).load(user.picture.large).into(profileImage)
+
                 with(user.status) {
                     when (this) {
                         Status.SELECTED -> {

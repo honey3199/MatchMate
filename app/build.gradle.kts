@@ -55,7 +55,6 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
-    implementation(libs.androidx.ui.graphics.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -72,8 +71,12 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     kapt(libs.androidx.room.compiler)
 
-    //Retrofit
+    // Retrofit
     implementation(libs.retrofit)
     implementation(libs.gson.converter)
     implementation(libs.com.gson)
+
+    // Glide
+    implementation(libs.com.github.glide)
+    kapt(libs.com.github.glide.compiler)
 }
