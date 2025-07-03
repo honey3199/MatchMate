@@ -68,14 +68,16 @@ class HomeActivity : AppCompatActivity() {
             userData.observe(this@HomeActivity) {
                 when (it) {
                     is RemoteResponse.Error -> {
+                        binding.loaderView.visibility = View.GONE
                         Toast.makeText(this@HomeActivity, it.errorMessage, LENGTH_LONG).show()
                     }
 
                     RemoteResponse.Loading -> {
-                        // Show Loader
+                        binding.loaderView.visibility = View.VISIBLE
                     }
 
                     is RemoteResponse.Success -> {
+                        binding.loaderView.visibility = View.GONE
                         userAdapter.setUserData(users = it.users)
                     }
                 }
