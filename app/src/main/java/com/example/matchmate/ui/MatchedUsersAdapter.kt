@@ -12,7 +12,7 @@ import com.example.matchmate.data.local.User
 import com.example.matchmate.data.local.getDetails
 import com.example.matchmate.databinding.MatchedUserItemBinding
 
-class UserDataAdapter(private val onStatusChanged: (index: Int, status: Status) -> Unit) :
+class UserDataAdapter(private val onStatusChanged: (user: User) -> Unit) :
     RecyclerView.Adapter<UserDataAdapter.UserViewHolder>() {
     private var userList = listOf<User>()
 
@@ -27,8 +27,8 @@ class UserDataAdapter(private val onStatusChanged: (index: Int, status: Status) 
         holder.apply {
             userList.getOrNull(position)?.let {
                 setData(it) { status ->
-                    onStatusChanged(position, status)
                     userList[position].status = status
+                    onStatusChanged(userList[position])
                     notifyItemChanged(position)
                 }
             }

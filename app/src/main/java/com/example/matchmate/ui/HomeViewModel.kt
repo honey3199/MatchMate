@@ -1,17 +1,16 @@
 package com.example.matchmate.ui
 
 import android.util.Log
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.setValue
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.matchmate.data.local.LocalRepository
-import com.example.matchmate.data.local.Status
 import com.example.matchmate.data.local.User
 import com.example.matchmate.data.remote.RemoteRepository
 import com.example.matchmate.data.remote.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,14 +23,19 @@ class HomeViewModel @Inject constructor(
 
     private val users = mutableListOf<User>()
 
+    private val _userData = MutableLiveData<RemoteResponse>()
+    val userData: LiveData<RemoteResponse> = _userData
+
+//    val cachedUserData: LiveData<RemoteResponse> = localRepository.getUsersLive()
+
     var count = 30
 
-    fun updateSelected(index: Int, status: Status) {
-        // update date to local database
+    fun updateSelected(user: User) = viewModelScope.launch {
+        localRepository.updateUser(user)
     }
 
-    fun fetchUsersFromRemote() = flow {
-        emit(RemoteResponse.Loading)
+    fun fetchUsersFromRemote() = viewModelScope.launch {
+        _userData.value = RemoteResponse.Loading
         val result = remoteRepository.getUsers(count)
         when (result.status) {
             Resource.Status.SUCCESS -> {
@@ -54,14 +58,14 @@ class HomeViewModel @Inject constructor(
                 }
                 // Store in Room for offline access
                 localRepository.insertUsers(users)
-                emit(RemoteResponse.Success(users))
+                _userData.postValue(RemoteResponse.Success(users))
             }
 
             Resource.Status.ERROR -> {
                 Log.d(TAG, "fetchDetailsFromRemote: Failure")
                 result.message?.let {
                     Log.d(TAG, it)
-                    emit(RemoteResponse.Error(it))
+                    _userData.postValue(RemoteResponse.Error(it))
                 }
             }
         }
