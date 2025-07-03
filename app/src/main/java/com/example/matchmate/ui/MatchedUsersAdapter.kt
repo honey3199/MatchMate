@@ -57,7 +57,7 @@ class UserDataAdapter(private val onStatusChanged: (user: User) -> Unit) :
                 tvMatchScore.text =
                     itemView.context.getString(R.string.match_score, user.matchScore)
 
-                Glide.with(itemView.context).load("user.picture.large")
+                Glide.with(itemView.context).load(user.picture.large)
                     .listener(object : RequestListener<Drawable> {
                         override fun onLoadFailed(
                             e: GlideException?,
