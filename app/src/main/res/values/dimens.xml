@@ -14,4 +14,5 @@
     <dimen name="margin_60dp">60dp</dimen>
     <dimen name="size_14sp">14sp</dimen>
     <dimen name="margin_12dp">12dp</dimen>
+    <dimen name="size_44sp">44sp</dimen>
 </resources>

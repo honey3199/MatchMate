@@ -43,7 +43,6 @@ class HomeViewModel @Inject constructor(
                 Log.d(TAG, result.data?.results.toString())
                 val remoteUser = result.data?.results ?: emptyList()
                 val users = remoteUser.map { user ->
-//                    if (true) { // userMatchScore
                     User(
                         id = "${user.id.name}${user.id.value}",
                         email = user.email,
@@ -55,9 +54,7 @@ class HomeViewModel @Inject constructor(
                         picture = user.picture,
                         matchScore = computeMatchScore(user)
                     )
-//                    }
                 }
-                // Store in Room for offline access
                 localRepository.insertUsers(users)
                 _userData.postValue(RemoteResponse.Success(users))
             }

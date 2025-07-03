@@ -42,6 +42,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
+            <TextView
+                android:id="@+id/profile_initials"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/size_44sp"
+                android:textStyle="bold"
+                android:visibility="gone"
+                tools:text="HP" />
+
             <ImageView
                 android:id="@+id/profile_image"
                 android:layout_width="110dp"
@@ -87,16 +98,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_8dp"
+            android:background="@drawable/bg_match_score"
             android:paddingHorizontal="@dimen/margin_12dp"
             android:paddingVertical="@dimen/margin_4dp"
             android:text="@string/match_score"
-            android:textStyle="bold"
             android:textColor="@color/colorPrimary"
-            android:background="@drawable/bg_match_score"
             android:textSize="@dimen/size_14sp"
-            app:layout_constraintTop_toBottomOf="@id/user_details"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/user_details" />
 
         <!-- Accept/Decline Buttons -->
         <LinearLayout
