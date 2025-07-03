@@ -1,6 +1,5 @@
 package com.example.matchmate.data.local
 
-import com.example.matchmate.data.models.User
 import jakarta.inject.Inject
 
 class LocalRepositoryImpl @Inject constructor(

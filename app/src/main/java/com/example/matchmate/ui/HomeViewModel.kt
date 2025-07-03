@@ -2,15 +2,16 @@ package com.example.matchmate.ui
 
 import android.util.Log
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.matchmate.data.local.LocalRepository
+import com.example.matchmate.data.local.Status
+import com.example.matchmate.data.local.User
 import com.example.matchmate.data.remote.RemoteRepository
+import com.example.matchmate.data.remote.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,31 +22,58 @@ class HomeViewModel @Inject constructor(
 
     private val TAG = "HomeViewModel"
 
-    var remoteResponse by mutableStateOf<RemoteResponse>(RemoteResponse.Loading)
-        private set
+    private val users = mutableListOf<User>()
 
-    fun fetchUsersFromRemote() = viewModelScope.launch(Dispatchers.IO) {
-        try {
-            val response = remoteRepository.getUsers()
-            if (response.isSuccessful) {
+    var count = 30
+
+    fun updateSelected(index: Int, status: Status) {
+        // update date to local database
+    }
+
+    fun fetchUsersFromRemote() = flow {
+        emit(RemoteResponse.Loading)
+        val result = remoteRepository.getUsers(count)
+        when (result.status) {
+            Resource.Status.SUCCESS -> {
                 Log.d(TAG, "fetchDetailsFromRemote: Success")
-                Log.d(TAG, response.body().toString())
-                remoteResponse = RemoteResponse.Success(response.body().toString())
-            } else {
-                Log.d(TAG, "fetchDetailsFromRemote: Failure")
-                Log.d(TAG, response.errorBody().toString())
-                remoteResponse = RemoteResponse.Error(response.errorBody().toString())
+                Log.d(TAG, result.data?.results.toString())
+                val remoteUser = result.data?.results ?: emptyList()
+                val users = remoteUser.map { user ->
+//                    if (true) { // userMatchScore
+                    User(
+                        id = "${user.id.name}${user.id.value}",
+                        email = user.email,
+                        age = user.dob.age,
+                        gender = user.gender,
+                        location = user.location,
+                        name = "${user.name.first} ${user.name.last}",
+                        phone = user.phone,
+                        picture = user.picture
+                    )
+//                    }
+                }
+                // Store in Room for offline access
+                localRepository.insertUsers(users)
+                emit(RemoteResponse.Success(users))
             }
-        } catch (e: Exception) {
-            Log.d(TAG, "fetchDetailsFromRemote: Exception")
-            Log.d(TAG, e.printStackTrace().toString())
-            remoteResponse = RemoteResponse.Error(e.printStackTrace().toString())
+
+            Resource.Status.ERROR -> {
+                Log.d(TAG, "fetchDetailsFromRemote: Failure")
+                result.message?.let {
+                    Log.d(TAG, it)
+                    emit(RemoteResponse.Error(it))
+                }
+            }
         }
+    }
+
+    private fun userMatchScore() {
+
     }
 }
 
 sealed interface RemoteResponse {
     data object Loading : RemoteResponse
     data class Error(val errorMessage: String) : RemoteResponse
-    data class Success(val responseValue: String) : RemoteResponse
+    data class Success(val users: List<User>) : RemoteResponse
 }
